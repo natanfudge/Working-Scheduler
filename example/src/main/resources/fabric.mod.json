@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "working-scheduler",
+  "id": "working-scheduler-example",
   "version": "${version}",
 
-  "name": "Working Scheduler",
-  "description": "Library mod that provides an working alternative to the Minecraft scheduler.",
+  "name": "Working Scheduler Example",
+  "description": "example of Working Scheduler usage",
   "authors": [
     "Fudge"
   ],
@@ -17,12 +17,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "scheduler.internal.WorkingSchedulerKt::init"
-    ],
-    "client": [
-      {
-        "value": "scheduler.internal.WorkingSchedulerKt::initClient"
-      }
+      "example.ExampleUsageKt::init"
     ]
   },
   "depends": {

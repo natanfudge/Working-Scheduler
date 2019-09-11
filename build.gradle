@@ -2,6 +2,9 @@ plugins {
     id 'fabric-loom'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm"
+    id "org.jetbrains.kotlin.plugin.serialization"
+    id "com.jfrog.bintray"
+    id 'com.matthewprenger.cursegradle'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -17,7 +20,9 @@ minecraft {
 
 repositories {
     maven { url = "http://maven.fabricmc.net/" }
+    jcenter()
 }
+
 
 dependencies {
     //to change the versions see the gradle.properties file
@@ -29,13 +34,14 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    modImplementation("com.lettuce.fudge:fabric-drawer:$drawer_version")
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", project.mod_version
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
@@ -66,25 +72,123 @@ jar {
     from "LICENSE"
 }
 
+def github_url = "https://github.com/$github_project"
+
 // configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+bintray {
+    user = project.hasProperty('bintray_user') ? project.property('bintray_user') : ""
+    key = project.hasProperty('bintray_api_key') ? project.property('bintray_api_key') : ""
+    publications = ["MavenPublication"]
+    publish = true //[Default: false] Whether version should be auto published after an upload
+    pkg {
+        repo = "libs"
+        name = archives_base_name
+        desc = description
+        websiteUrl = github_url
+        issueTrackerUrl = "$github_url/issues"
+        githubRepo = github_project //Optional Github repository
+        githubReleaseNotesFile = 'README.md' //Optional Github readme file
+        licenses = [license]
+        vcsUrl = github_url
+        version {
+            name = mod_version
+            released = new Date()
         }
     }
 
-    // select the repositories you want to publish to
-    repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name project.license
+        }
+    }
+    developers {
+        developer {
+            id "fudge"
+            name "natan"
+            email "natandestroyer100@gmail.com"
+        }
+    }
+
+    scm {
+        url github_url
+    }
+}
+
+publishing {
+    publications {
+        MavenPublication(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(kotlinSourcesJar) {
+                classifier = "sources"
+                builtBy remapSourcesJar
+            }
+            groupId project.maven_group
+            artifactId project.archives_base_name
+            version project.mod_version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', description)
+                root.appendNode('name', archives_base_name)
+                root.appendNode('url', github_url)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+curseforge {
+    apiKey = project.hasProperty("curseforge_api_key") ? project.curseforge_api_key : ""
+    project {
+        id = curseforge_id
+        releaseType = 'release'
+        addGameVersion "Fabric"
+        changelogType = "markdown"
+        changelog = file("changelog.md")
+
+        mainArtifact(remapJar) {
+            displayName = "$display_name $project.mod_version"
+        }
+        addArtifact sourcesJar
+
+        afterEvaluate {
+            mainArtifact(remapJar)
+            uploadTask.dependsOn(remapJar)
+        }
+    }
+
+    options {
+        forgeGradleIntegration = false
     }
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "1.8"
+
+Properties properties = new Properties()
+File propertiesFile = new File('gradle.properties')
+propertiesFile.withInputStream {
+    properties.load(it)
+}
+
+
+task updateTemplate(type: Copy) {
+    group = "template"
+    description = "Switches out gradle.properties variables like \$mod_version in .template.md files, and copies the results into .md files."
+    from(rootDir)
+    include("**/*.template.md")
+    filesMatching("**/*.template.md") {
+        def extensionLength = ".template.md".length()
+
+        name = sourceName.substring(0, sourceName.length() - extensionLength) + ".md"
+        expand(properties)
+    }
+    destinationDir = rootDir
+}
+
+bintrayUpload.dependsOn updateTemplate
+bintrayUpload.dependsOn "curseforge$curseforge_id"
+

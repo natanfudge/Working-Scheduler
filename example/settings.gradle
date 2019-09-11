@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         jcenter()
         maven {
             name = 'Fabric'
@@ -12,9 +11,6 @@ pluginManagement {
     plugins {
         id 'fabric-loom' version loom_version
         id "org.jetbrains.kotlin.jvm" version kotlin_version
-        id "com.jfrog.bintray" version bintray_gradle_version
-        id 'com.matthewprenger.cursegradle' version cursegradle_version
-        id "org.jetbrains.kotlin.plugin.serialization" version kotlin_version
     }
 
 }
