@@ -30,5 +30,8 @@
     "fabric": "*",
     "fabric-language-kotlin": "*",
     "fabricdrawer": "1.1.1"
+  },
+  "custom": {
+    "modmenu:api": true
   }
 }

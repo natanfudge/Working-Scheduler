@@ -5,6 +5,7 @@ package scheduler
 
 import drawer.ForUuid
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 import kotlinx.serialization.UseSerializers
 import net.minecraft.block.Block
 import net.minecraft.nbt.CompoundTag
@@ -82,7 +83,18 @@ public object BlockScheduler {
 
 }
 
-@Serializable
+
+/**
+ * Use file:UseSerializers(CancellationTokenSerializer::class)
+ * to serialize CancellationTokens that are nested in a @Serializable class,
+ * And use CancellationTokenSerializer.put() / CancellationTokenSerializer.getFrom() to serialize a singular CancellationToken.
+ *
+ * (This is because of a loom bug)
+ */
+@Serializer(forClass = CancellationToken::class)
+public object CancellationTokenSerializer
+
+
 public data class CancellationToken(
     /**
      * To correctly identify the scheduled action
