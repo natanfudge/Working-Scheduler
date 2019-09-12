@@ -48,7 +48,6 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
 
         player.sendMessage(LiteralText("$messageToSend at pos $pos."))
 
-
         when (scheduleId) {
             ScheduleIds.Client.ScheduleExample, ScheduleIds.Client.RepeatExample, ScheduleIds.Client.RepeatForExample -> {
                 assert(world.isClient)

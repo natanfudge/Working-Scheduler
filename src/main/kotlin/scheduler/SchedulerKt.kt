@@ -49,8 +49,8 @@ public object Scheduler {
 
 
     public fun <T> repeat(
-        tickInterval: Int,
         repeatAmount: Int,
+        tickInterval: Int,
         block: T, world: World,
         scheduleId: Int = 0,
         blockPos: BlockPos = BlockPos.ORIGIN,
