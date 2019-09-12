@@ -21,6 +21,7 @@ import scheduler.internal.util.isServer
 import scheduler.internal.util.sendPacketToServer
 import java.util.*
 
+//TODO: docs
 
 public interface Scheduleable {
     fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag)
@@ -82,7 +83,7 @@ public object BlockScheduler {
 }
 
 @Serializable
-public data class CancellationToken internal constructor(
+public data class CancellationToken(
     /**
      * To correctly identify the scheduled action
      */

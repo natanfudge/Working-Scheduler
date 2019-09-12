@@ -1,5 +1,6 @@
 package example
 
+import kotlinx.serialization.Serializable
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
