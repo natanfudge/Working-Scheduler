@@ -26,10 +26,8 @@ public interface Scheduleable {
     fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag)
 }
 
-/**
- * When scheduling from the client it will tick in the server and then send a packet back to the client when its done.
- */
-public object Scheduler {
+
+public object BlockScheduler {
     /**
      * @param scheduleId The same value will be available in [Scheduleable.onScheduleEnd] for you to be able
      * to differentiate between different schedules. This is not needed when you only schedule one thing in a block.

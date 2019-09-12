@@ -16,24 +16,36 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
+import scheduler.BlockScheduler
 import scheduler.CancellationToken
 import scheduler.Scheduleable
-import scheduler.Scheduler
 import java.util.*
 
 const val ModId = "example_usage"
+val JavaBlock = ExampleUsageJava();
 fun init() {
-    Registry.register(Registry.BLOCK, Identifier(ModId,"example_block"), ExampleBlock)
+    Registry.register(Registry.BLOCK, Identifier(ModId, "example_block"), ExampleBlock)
     Registry.register(
-        Registry.ITEM, Identifier(ModId,"example_block"), BlockItem(
+        Registry.ITEM, Identifier(ModId, "example_block"), BlockItem(
             ExampleBlock, Item.Settings().group(
+                ItemGroup.MISC
+            )
+        )
+    )
+
+    Registry.register(Registry.BLOCK, Identifier(ModId, "example_block_java"), JavaBlock)
+    Registry.register(
+        Registry.ITEM, Identifier(ModId, "example_block_java"), BlockItem(
+            JavaBlock, Item.Settings().group(
                 ItemGroup.MISC
             )
         )
     )
 }
 
-object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Scheduleable {
+const val SchedulingPlayerIdKey = "player"
+
+abstract class AbstractExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Scheduleable {
     override fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag) {
         val player = getSchedulingPlayer(additionalData, world) ?: return
         val messageToSend = when (scheduleId) {
@@ -70,9 +82,19 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
         return player
     }
 
-    private const val SchedulingPlayerIdKey = "player"
+    override fun onBlockRemoved(
+        blockState_1: BlockState?,
+        world: World,
+        blockPos_1: BlockPos?,
+        blockState_2: BlockState?,
+        boolean_1: Boolean
+    ) {
+        // Note: will only cancel the server one
+        this.repeatForCancellationToken?.cancel(world)
+    }
 
-    private object ScheduleIds {
+
+    object ScheduleIds {
         object Client {
             const val ScheduleExample = 1
             const val RepeatExample = 2
@@ -87,18 +109,10 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
     }
 
     var repeatForCancellationToken: CancellationToken? = null
+}
 
-    override fun onBlockRemoved(
-        blockState_1: BlockState?,
-        world: World,
-        blockPos_1: BlockPos?,
-        blockState_2: BlockState?,
-        boolean_1: Boolean
-    ) {
-        // Note: will only cancel the server one
-        repeatForCancellationToken?.cancel(world)
-    }
 
+object ExampleBlock : AbstractExampleBlock() {
     override fun activate(
         blockState: BlockState,
         world: World,
@@ -110,7 +124,7 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
         val scheduleData = CompoundTag().apply {
             putUuid(SchedulingPlayerIdKey, player?.uuid ?: UUID(0, 0))
         }
-        Scheduler.schedule(
+        BlockScheduler.schedule(
             ticksUntilEnd = 100,
             block = this,
             scheduleId = if (world.isClient) ScheduleIds.Client.ScheduleExample else ScheduleIds.Server.ScheduleExample,
@@ -119,7 +133,7 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
             additionalData = scheduleData
         )
 
-        Scheduler.repeat(
+        BlockScheduler.repeat(
             tickInterval = 5,
             repeatAmount = 5,
             block = this,
@@ -130,7 +144,7 @@ object ExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Sch
 
         )
 
-        repeatForCancellationToken = Scheduler.repeatFor(
+        repeatForCancellationToken = BlockScheduler.repeatFor(
             tickInterval = 15,
             ticksUntilStop = 500,
             block = this,
