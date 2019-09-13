@@ -24,9 +24,7 @@ import java.util.*
 
 //TODO: docs
 
-public interface Scheduleable {
-    fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag)
-}
+
 
 
 public object BlockScheduler {

@@ -44,6 +44,7 @@ fun init() {
     )
 }
 
+
 const val SchedulingPlayerIdKey = "player"
 
 abstract class AbstractExampleBlock : Block(FabricBlockSettings.of(Material.STONE).build()), Scheduleable {

@@ -7,6 +7,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import scheduler.Scheduler;
 import scheduler.SchedulerBuilder;
 
 import static example.ExampleUsageKt.SchedulingPlayerIdKey;
@@ -18,21 +19,21 @@ public class ExampleUsageJava extends AbstractExampleBlock {
         CompoundTag scheduleData = new CompoundTag();
         scheduleData.putUuid(SchedulingPlayerIdKey, player.getUuid());
 
-        new SchedulerBuilder<>(this, world)
+        Scheduler.Builder(this, world)
                 .scheduleId(world.isClient ? ScheduleIds.Client.ScheduleExample : ScheduleIds.Server.ScheduleExample)
-                .atPos(pos)
+                .pos(pos)
                 .additionalData(scheduleData)
                 .schedule(100);
 
-        new SchedulerBuilder<>(this, world)
+        Scheduler.Builder(this, world)
                 .scheduleId(world.isClient ? ScheduleIds.Client.RepeatExample : ScheduleIds.Server.RepeatExample)
-                .atPos(pos)
+                .pos(pos)
                 .additionalData(scheduleData)
                 .repeat(5, 5);
 
-        this.setRepeatForCancellationToken(new SchedulerBuilder<>(this, world)
+        this.setRepeatForCancellationToken(Scheduler.Builder(this, world)
                 .scheduleId(world.isClient ? ScheduleIds.Client.RepeatForExample : ScheduleIds.Server.RepeatForExample)
-                .atPos(pos)
+                .pos(pos)
                 .additionalData(scheduleData)
                 .repeatFor(500, 15));
 
@@ -40,3 +41,5 @@ public class ExampleUsageJava extends AbstractExampleBlock {
     }
 
 }
+
+

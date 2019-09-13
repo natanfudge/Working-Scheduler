@@ -14,7 +14,10 @@ public class SchedulerBuilder<T extends Block & Scheduleable> {
     private BlockPos blockPos = BlockPos.ORIGIN;
     private CompoundTag additionalData = new CompoundTag();
 
-    public SchedulerBuilder(T scheduleable, World world) {
+    /**
+     * Use Scheduler.Builder instead.
+     */
+    SchedulerBuilder(T scheduleable, World world) {
         this.scheduleable = scheduleable;
         this.world = world;
     }
@@ -24,7 +27,7 @@ public class SchedulerBuilder<T extends Block & Scheduleable> {
         return this;
     }
 
-    public SchedulerBuilder atPos(BlockPos pos) {
+    public SchedulerBuilder pos(BlockPos pos) {
         this.blockPos = pos;
         return this;
     }
