@@ -123,14 +123,7 @@ public boolean activate(BlockState blockState, World world, BlockPos pos, Player
 
 #### Kotlin
 ```kotlin
-override fun activate(
-        blockState: BlockState,
-        world: World,
-        pos: BlockPos,
-        player: PlayerEntity?,
-        hand: Hand?,
-        hitResult: BlockHitResult?
-    ): Boolean {
+override fun activate(blockState: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hitResult: BlockHitResult?): Boolean {
     val scheduleData = CompoundTag().apply { putUuid("player", player?.uuid ?: UUID(0, 0)) }
 
     BlockScheduler.schedule(
