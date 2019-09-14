@@ -1,5 +1,5 @@
 # Working Scheduler
-[![CurseForge](https://curse.nikky.moe/api/img/334410?logo)](https://curseforge.com/minecraft/mc-mods/working-scheduler)
+[![CurseForge](https://curse.nikky.moe/api/img/340964?logo)](https://curseforge.com/minecraft/mc-mods/working-scheduler)
 [![Discord](https://img.shields.io/discord/219787567262859264?color=blue&label=Discord)](https://discord.gg/CFaCu97)
 [![Bintray](https://api.bintray.com/packages/natanfudge/libs/working-scheduler/images/download.svg)](https://bintray.com/beta/#/natanfudge/libs/working-scheduler?tab=overview)
 [![Latest Commit](https://img.shields.io/github/last-commit/natanfudge/working-scheduler)](https://github.com/natanfudge/working-scheduler/commits/master)
