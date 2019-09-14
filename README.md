@@ -1,4 +1,9 @@
 # Working Scheduler
+[![CurseForge](https://curse.nikky.moe/api/img/334410?logo)](https://curseforge.com/minecraft/mc-mods/working-scheduler)
+[![Discord](https://img.shields.io/discord/219787567262859264?color=blue&label=Discord)](https://discord.gg/CFaCu97)
+[![Bintray](https://api.bintray.com/packages/natanfudge/libs/working-scheduler/images/download.svg)](https://bintray.com/beta/#/natanfudge/libs/working-scheduler?tab=overview)
+[![Latest Commit](https://img.shields.io/github/last-commit/natanfudge/working-scheduler)](https://github.com/natanfudge/working-scheduler/commits/master)
+
 Working Scheduler provides a working, fast, and comprehensive alternative to Minecraft's scheduler for Fabric mods.
 
 ## Introduction
@@ -30,7 +35,7 @@ repositories {
 Add the mod dependency:
 ```groovy
 dependencies {
-    modImplementation("com.lettuce.fudge:working-scheduler:1.0.999994")
+    modImplementation("com.lettuce.fudge:working-scheduler:1.1.0")
 }
 ```
 ## Usage

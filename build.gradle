@@ -190,5 +190,5 @@ task updateTemplate(type: Copy) {
 }
 
 bintrayUpload.dependsOn updateTemplate
-//bintrayUpload.dependsOn "curseforge$curseforge_id"
+bintrayUpload.dependsOn "curseforge$curseforge_id"
 
