@@ -1,5 +1,5 @@
 @file:UseSerializers(ForUuid::class)
-@file:Suppress("RedundantVisibilityModifier", "unused")
+@file:Suppress("RedundantVisibilityModifier", "unused", "MemberVisibilityCanBePrivate")
 
 package scheduler
 
@@ -13,26 +13,16 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import scheduler.internal.*
-import scheduler.internal.CancelTickingInServerPacket
-import scheduler.internal.Repetition
-import scheduler.internal.cancelScheduleServer
-import scheduler.internal.logWarning
-import scheduler.internal.schedule
 import scheduler.internal.util.isServer
 import scheduler.internal.util.sendPacketToServer
 import java.util.*
 
-//TODO: docs
-
-
-
-
 public object BlockScheduler {
     /**
-     * @param scheduleId The same value will be available in [Scheduleable.onScheduleEnd] for you to be able
-     * to differentiate between different schedules. This is not needed when you only schedule one thing in a block.
-     * @param blockPos The same value will be available in [Scheduleable.onScheduleEnd] for you to use.
-     * You can opt to not provide a value, but note that you will just get [BlockPos.ORIGIN] in the callback.
+     * Calls the [block]'s onScheduleEnd method after [ticksUntilEnd] ticks.
+     * All other parameters of this function will simply reappear in the [Scheduleable.onScheduleEnd] for you to use.
+     *
+     * @param scheduleId is useful for differentiating between different schedules.
      */
     public fun <T> schedule(
         ticksUntilEnd: Int,
@@ -46,6 +36,12 @@ public object BlockScheduler {
     )
 
 
+    /**
+     * Calls the [block]'s [repeatAmount] times, with an interval of [tickInterval] ticks.
+     * All other parameters of this function will simply reappear in the [Scheduleable.onScheduleEnd] for you to use.
+     *
+     * @param scheduleId is useful for differentiating between different schedules.
+     */
     public fun <T> repeat(
         repeatAmount: Int,
         tickInterval: Int,
@@ -61,6 +57,12 @@ public object BlockScheduler {
         )
     )
 
+    /**
+     * Calls the [block]'s onScheduleEnd method every [tickInterval] ticks, for [ticksUntilStop] ticks.
+     * All other parameters of this function will simply reappear in the [Scheduleable.onScheduleEnd] for you to use.
+     *
+     * @param scheduleId is useful for differentiating between different schedules.
+     */
     public fun <T> repeatFor(
         ticksUntilStop: Int,
         tickInterval: Int,
@@ -92,6 +94,10 @@ public object BlockScheduler {
 @Serializer(forClass = CancellationToken::class)
 public object CancellationTokenSerializer
 
+/**
+ * Returned by every scheduling call. Call [cancel] to cancel the scheduled action.
+ * Usually this needs to be stored, by a BlockEntity for example. [CancellationTokenSerializer] is useful for this if you use Drawer.
+ */
 @Serializable
 public data class CancellationToken(
     /**
@@ -99,7 +105,10 @@ public data class CancellationToken(
      */
     private val cancellationUUID: UUID
 ) {
-    fun cancel(world: World) {
+    /**
+     * Will cancel the scheduling call. Make sure to call on the same [World].
+     */
+    public fun cancel(world: World) {
         if (world.isServer && world is ServerWorld) {
             cancelScheduleServer(world, cancellationUUID)
         } else if (world.isClient) {
