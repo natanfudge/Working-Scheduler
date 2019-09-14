@@ -36,7 +36,7 @@ dependencies {
 ## Usage
 The first thing you need to do is implement `Scheduleable` on a block of your choosing. 
 Generally this should be the same block will execute the schedule, but it can be whatever block you want.
- ----->>>>>>>>>>>TODO: link to "Why it needs to be a block and the future"<<<<<<---------
+
 ```java
 public class ExampleScheduleableBlock extends Block implements Scheduleable {
     @Override
@@ -195,9 +195,26 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
 }
 ```
 
-Note that usually you want your `CancellationToken` to persist when between world loads,
+Note that usually you want your `CancellationToken` to persist between world loads,
 in which case you can store it in a block entity for example.
 A `CancellationTokenSerializer` exists specifically to make this easier using [Drawer](https://github.com/natanfudge/Fabric-Drawer).
 
-//TODO: why we need a block
-//TODO: depenendencies
+## Dependencies
+Working Scheduler depends on [Kotlin](https://www.curseforge.com/minecraft/mc-mods/fabric-language-kotlin) and [Drawer](https://www.curseforge.com/minecraft/mc-mods/fabric-drawer).
+If you don't want to depend on them yourself, you can include them in your mod like so:
+```groovy
+modImplementation("net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version")
+modImplementation("com.lettuce.fudge:fabric-drawer:$drawer_version")
+```
+
+## Why do we need a block, and the future
+Right now Scheduler requires you to implement an interface on a Block of yours. 
+This is because the Block is already instantiated by yourself which helps avoid reflection. 
+Additionally, scheduling is most commonly done from blocks.
+Theoretically, an API like that looks like this could exist:
+```kotlin
+schedule(world,10) {
+    println("10 ticks have passed.")
+}
+```
+But that would require either reflection or a compiler plugin. If you think this is a good idea, feel free to make an issue.

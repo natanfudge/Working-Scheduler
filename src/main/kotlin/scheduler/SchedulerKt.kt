@@ -92,7 +92,7 @@ public object BlockScheduler {
 @Serializer(forClass = CancellationToken::class)
 public object CancellationTokenSerializer
 
-
+@Serializable
 public data class CancellationToken(
     /**
      * To correctly identify the scheduled action

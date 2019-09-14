@@ -23,7 +23,7 @@ import scheduler.Scheduleable
 import java.util.*
 
 const val ModId = "example_usage"
-val JavaBlock = ExampleUsageJava();
+val JavaBlock = ExampleUsageJava()
 fun init() {
     Registry.register(Registry.BLOCK, Identifier(ModId, "example_block"), ExampleBlock)
     Registry.register(
