@@ -40,7 +40,7 @@ dependencies {
 ```
 ## Usage
 The first thing you need to do is implement `Scheduleable` on a block of your choosing. 
-Generally this should be the same block will execute the schedule, but it can be whatever block you want.
+Generally this should be the same block that will execute the schedule, but it can be whatever block you want.
 [Why do we need a Block?](https://github.com/natanfudge/Working-Scheduler#why-do-we-need-a-block-and-the-future)
 ```java
 public class ExampleScheduleableBlock extends Block implements Scheduleable {
