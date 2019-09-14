@@ -203,8 +203,8 @@ A `CancellationTokenSerializer` exists specifically to make this easier using [D
 Working Scheduler depends on [Kotlin](https://www.curseforge.com/minecraft/mc-mods/fabric-language-kotlin) and [Drawer](https://www.curseforge.com/minecraft/mc-mods/fabric-drawer).
 If you don't want to depend on them yourself, you can include them in your mod like so:
 ```groovy
-modImplementation("net.fabricmc:fabric-language-kotlin:1.3.50+build.1")
-modImplementation("com.lettuce.fudge:fabric-drawer:1.1.1")
+include("net.fabricmc:fabric-language-kotlin:1.3.50+build.1")
+include("com.lettuce.fudge:fabric-drawer:1.1.1")
 ```
 
 ## Why do we need a block, and the future
