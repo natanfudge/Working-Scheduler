@@ -97,7 +97,7 @@ class ExampleScheduleableBlock(settings: Block.Settings) : Block(settings), Sche
     }
 }
 ```
-<details>
+</details>
 
 Full example projects can be seen [here](https://github.com/natanfudge/Working-Scheduler/tree/master/example/src/main).
 
