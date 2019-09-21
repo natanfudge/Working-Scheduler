@@ -131,6 +131,30 @@ public boolean activate(BlockState blockState, World world, BlockPos pos, Player
 
 <details>
     <summary>Kotlin</summary>
+    
+ ```kotlin	   
+override fun activate(blockState: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hitResult: BlockHitResult?): Boolean {	</details>
+    val scheduleData = CompoundTag().apply { putUuid("player", player?.uuid ?: UUID(0, 0)) }	
+    BlockScheduler.schedule(	
+        ticksUntilEnd = 100,	
+        block = this,	
+        scheduleId = 1,	
+        world = world,	
+        blockPos = pos,	
+        additionalData = scheduleData	
+    )	
+    BlockScheduler.repeat(	
+        repeatAmount = 4,	
+        tickInterval = 20,	
+        block = this,	
+        scheduleId = 2,	
+        world = world,	
+        blockPos = pos,	
+        additionalData = scheduleData	
+    )	
+    return true	
+}	
+```
 </details>
 
 And then use the data when the schedule ends:
