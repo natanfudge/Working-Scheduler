@@ -29,7 +29,7 @@
     "fabricloader": ">=0.4.0",
     "fabric": "*",
     "fabric-language-kotlin": "*",
-    "fabricdrawer": "1.1.1"
+    "fabricdrawer": ">=1.1.1"
   },
   "custom": {
     "modmenu:api": true
