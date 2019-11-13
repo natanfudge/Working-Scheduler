@@ -35,7 +35,7 @@ repositories {
 Add the mod dependency:
 ```groovy
 dependencies {
-    modImplementation("com.lettuce.fudge:working-scheduler:1.1.0")
+    modImplementation("com.lettuce.fudge:working-scheduler:1.1.1")
 }
 ```
 ## Usage
@@ -209,7 +209,7 @@ Working Scheduler depends on [Kotlin](https://www.curseforge.com/minecraft/mc-mo
 If you don't want to depend on them yourself, you can include them in your mod like so:
 ```groovy
 include("net.fabricmc:fabric-language-kotlin:1.3.50+build.1")
-include("com.lettuce.fudge:fabric-drawer:1.1.1")
+include("com.lettuce.fudge:fabric-drawer:3.0.0")
 ```
 
 ## Why do we need a block, and the future
