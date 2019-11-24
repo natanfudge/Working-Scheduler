@@ -9,15 +9,17 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.server.world.ServerWorld
-import scheduler.internal.util.*
+import scheduler.internal.util.InternalC2SPacket
+import scheduler.internal.util.InternalS2CPacket
+import scheduler.internal.util.world
 import java.util.*
 
 internal interface C2SPacket<T : C2SPacket<T>> : InternalC2SPacket<T> {
-    override val modId get()= ModId
+    override val modId get() = ModId
 }
 
 internal interface S2CPacket<T : S2CPacket<T>> : InternalS2CPacket<T> {
-    override val modId get()= ModId
+    override val modId get() = ModId
 }
 
 @Serializable
@@ -34,17 +36,21 @@ internal data class TickInServerPacket(val schedule: Schedule) : C2SPacket<TickI
 
     @Transient
     override val serializer = serializer()
-    @Transient
-    override val serializationContext = TickerSerializersModule
 
 }
 
 
 @Serializable
-internal data class FinishScheduleInClientPacket(val scheduleContext: ScheduleContext) : S2CPacket<FinishScheduleInClientPacket> {
+internal data class FinishScheduleInClientPacket(val scheduleContext: ScheduleContext) :
+    S2CPacket<FinishScheduleInClientPacket> {
     override fun use(context: PacketContext) {
         val scheduleable = getScheduleableFromRegistry(scheduleContext.blockId) ?: return
-        scheduleable.onScheduleEnd(context.world, scheduleContext.blockPos, scheduleContext.scheduleId, scheduleContext.additionalData)
+        scheduleable.onScheduleEnd(
+            context.world,
+            scheduleContext.blockPos,
+            scheduleContext.scheduleId,
+            scheduleContext.additionalData
+        )
     }
 
     @Transient
@@ -58,7 +64,7 @@ internal data class CancelTickingInServerPacket(val cancellationUUID: UUID) : C2
             logWarning("A packet to the server is somehow not in a server world.")
             return
         }
-        cancelScheduleServer(context.world as ServerWorld,cancellationUUID)
+        cancelScheduleServer(context.world as ServerWorld, cancellationUUID)
     }
 
     @Transient

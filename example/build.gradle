@@ -18,6 +18,7 @@ minecraft {
 repositories {
     maven { url = "http://maven.fabricmc.net/" }
     jcenter()
+    mavenLocal()
 }
 
 

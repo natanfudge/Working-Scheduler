@@ -11,6 +11,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.LiteralText
+import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.hit.BlockHitResult
@@ -115,14 +116,14 @@ abstract class AbstractExampleBlock : Block(FabricBlockSettings.of(Material.STON
 
 
 object ExampleBlock : AbstractExampleBlock() {
-    override fun activate(
+    override fun onUse(
         blockState: BlockState,
         world: World,
         pos: BlockPos,
         player: PlayerEntity?,
         hand: Hand?,
         hitResult: BlockHitResult?
-    ): Boolean {
+    ): ActionResult {
         val scheduleData = CompoundTag().apply {
             putUuid(SchedulingPlayerIdKey, player?.uuid ?: UUID(0, 0))
         }
@@ -157,7 +158,7 @@ object ExampleBlock : AbstractExampleBlock() {
         )
 
 
-        return true
+        return ActionResult.SUCCESS
     }
 }
 

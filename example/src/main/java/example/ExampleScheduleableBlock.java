@@ -50,8 +50,4 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
         super(block$Settings_1);
     }
 
-    @Override
-    public boolean activate(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-        return super.activate(blockState, world, pos, player, hand, hitResult);
-    }
 }

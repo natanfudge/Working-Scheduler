@@ -3,6 +3,7 @@ package example;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +16,7 @@ import static example.ExampleUsageKt.SchedulingPlayerIdKey;
 
 public class ExampleUsageJava extends AbstractExampleBlock {
     @Override
-    public boolean activate(BlockState blockState_1, World world, BlockPos pos, PlayerEntity player, Hand hand_1, BlockHitResult blockHitResult_1) {
+    public ActionResult onUse(BlockState blockState_1, World world, BlockPos pos, PlayerEntity player, Hand hand_1, BlockHitResult blockHitResult_1) {
         CompoundTag scheduleData = new CompoundTag();
         scheduleData.putUuid(SchedulingPlayerIdKey, player.getUuid());
 
@@ -37,7 +38,7 @@ public class ExampleUsageJava extends AbstractExampleBlock {
                 .additionalData(scheduleData)
                 .repeatFor(500, 15));
 
-        return true;
+        return ActionResult.SUCCESS;
     }
 
 }

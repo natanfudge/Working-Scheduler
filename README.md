@@ -35,12 +35,12 @@ repositories {
 Add the mod dependency:
 ```groovy
 dependencies {
-    modImplementation("com.lettuce.fudge:working-scheduler:1.1.1")
+    modImplementation("com.lettuce.fudge:working-scheduler:1.1.3-1.15-pre1")
 }
 ```
 ## Usage
 The first thing you need to do is implement `Scheduleable` on a block of your choosing. 
-Generally this should be the same block that will execute the schedule, but it can be whatever block you want.
+Generally this should be the same block will execute the schedule, but it can be whatever block you want.
 [Why do we need a Block?](https://github.com/natanfudge/Working-Scheduler#why-do-we-need-a-block-and-the-future)
 ```java
 public class ExampleScheduleableBlock extends Block implements Scheduleable {
@@ -53,9 +53,7 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
 As an example we will schedule things when the player has right-clicked the block.
 To schedule an action we have separate idiomatic Java and Kotlin apis.
  (Note: Java API is usable from Kotlin as well but using the Kotlin-specific one is recommended)
-<details>
-    <summary>Java</summary>
-    
+#### Java
 ```java
 public class ExampleScheduleableBlock extends Block implements Scheduleable {
     public void onScheduleEnd(World world, BlockPos pos, int scheduleId, CompoundTag additionalData) {/*...*/}
@@ -75,10 +73,8 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
     }
 }
 ```
-</details>
-<details>
-    <summary>Kotlin</summary>
-    
+
+#### Kotlin
 ```kotlin
 class ExampleScheduleableBlock(settings: Block.Settings) : Block(settings), Scheduleable {
     override fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag) {/*...*/ }
@@ -97,15 +93,12 @@ class ExampleScheduleableBlock(settings: Block.Settings) : Block(settings), Sche
     }
 }
 ```
-</details>
 
 Full example projects can be seen [here](https://github.com/natanfudge/Working-Scheduler/tree/master/example/src/main).
 
 ### Attaching additional data
 Provide the data while scheduling:
-<details>
-    <summary>Java</summary>
-    
+#### Java
 ```java
 public boolean activate(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
     if(player == null) return false;
@@ -127,35 +120,41 @@ public boolean activate(BlockState blockState, World world, BlockPos pos, Player
     return true;
 }
 ```
-</details>
 
-<details>
-    <summary>Kotlin</summary>
-    
- ```kotlin	   
-override fun activate(blockState: BlockState, world: World, pos: BlockPos, player: PlayerEntity?, hand: Hand?, hitResult: BlockHitResult?): Boolean {	</details>
-    val scheduleData = CompoundTag().apply { putUuid("player", player?.uuid ?: UUID(0, 0)) }	
-    BlockScheduler.schedule(	
-        ticksUntilEnd = 100,	
-        block = this,	
-        scheduleId = 1,	
-        world = world,	
-        blockPos = pos,	
-        additionalData = scheduleData	
-    )	
-    BlockScheduler.repeat(	
-        repeatAmount = 4,	
-        tickInterval = 20,	
-        block = this,	
-        scheduleId = 2,	
-        world = world,	
-        blockPos = pos,	
-        additionalData = scheduleData	
-    )	
-    return true	
-}	
+#### Kotlin
+```kotlin
+override fun activate(
+        blockState: BlockState,
+        world: World,
+        pos: BlockPos,
+        player: PlayerEntity?,
+        hand: Hand?,
+        hitResult: BlockHitResult?
+    ): Boolean {
+    val scheduleData = CompoundTag().apply { putUuid("player", player?.uuid ?: UUID(0, 0)) }
+
+    BlockScheduler.schedule(
+        ticksUntilEnd = 100,
+        block = this,
+        scheduleId = 1,
+        world = world,
+        blockPos = pos,
+        additionalData = scheduleData
+    )
+
+    BlockScheduler.repeat(
+        repeatAmount = 4,
+        tickInterval = 20,
+        block = this,
+        scheduleId = 2,
+        world = world,
+        blockPos = pos,
+        additionalData = scheduleData
+    )
+
+    return true
+}
 ```
-</details>
 
 And then use the data when the schedule ends:
 ```java
@@ -209,8 +208,8 @@ A `CancellationTokenSerializer` exists specifically to make this easier using [D
 Working Scheduler depends on [Kotlin](https://www.curseforge.com/minecraft/mc-mods/fabric-language-kotlin) and [Drawer](https://www.curseforge.com/minecraft/mc-mods/fabric-drawer).
 If you don't want to depend on them yourself, you can include them in your mod like so:
 ```groovy
-include("net.fabricmc:fabric-language-kotlin:1.3.50+build.1")
-include("com.lettuce.fudge:fabric-drawer:3.0.0")
+include("net.fabricmc:fabric-language-kotlin:1.3.60+build.1")
+include("com.lettuce.fudge:fabric-drawer:3.2.0-1.15-pre1")
 ```
 
 ## Why do we need a block, and the future

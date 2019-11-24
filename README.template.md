@@ -35,7 +35,7 @@ repositories {
 Add the mod dependency:
 ```groovy
 dependencies {
-    modImplementation("com.lettuce.fudge:working-scheduler:$mod_version")
+    modImplementation("com.lettuce.fudge:working-scheduler:$total_version")
 }
 ```
 ## Usage

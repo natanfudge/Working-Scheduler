@@ -22,19 +22,18 @@ internal fun <T> schedule(
     repetition: Repetition
 ): CancellationToken
         where T : Scheduleable, T : Block {
-    
 
 
     val clientToSendTo = if (world.isServer && world is ServerWorld) {
         null
     } else if (world.isClient) {
-        getMinecraftClient().player.uuid
+        getMinecraftClient().player!!.uuid
     } else {
         logWarning(
             "Attempt to schedule in a world that is ClientWorld but with isClient = false. " +
                     "You might get a ClassNotFound exception here!"
         )
-        getMinecraftClient().player.uuid
+        getMinecraftClient().player!!.uuid
     }
 
     val cancellationUUID = UUID.randomUUID()

@@ -24,6 +24,6 @@
     "fabricloader": ">=0.4.0",
     "fabric": "*",
     "fabric-language-kotlin": "*",
-    "fabricdrawer": "1.1.1"
+    "fabricdrawer": ">=3.1.0-1.15-pre1"
   }
 }

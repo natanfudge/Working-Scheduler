@@ -7,11 +7,14 @@ plugins {
     id 'com.matthewprenger.cursegradle'
 }
 
+def total_version = "$mod_version-$minecraft_version"
+
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = total_version
 group = project.maven_group
 
 minecraft {
@@ -41,7 +44,7 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.mod_version
+    inputs.property "version", total_version
 
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json"
@@ -91,7 +94,7 @@ bintray {
         licenses = [license]
         vcsUrl = github_url
         version {
-            name = mod_version
+            name = total_version
             released = new Date()
         }
     }
@@ -129,7 +132,7 @@ publishing {
             }
             groupId project.maven_group
             artifactId project.archives_base_name
-            version project.mod_version
+            version total_version
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', description)
@@ -151,7 +154,7 @@ curseforge {
         changelog = file("changelog.md")
 
         mainArtifact(remapJar) {
-            displayName = "$display_name $project.mod_version"
+            displayName = "$display_name $total_version"
         }
         addArtifact sourcesJar
 
@@ -173,6 +176,7 @@ File propertiesFile = new File('gradle.properties')
 propertiesFile.withInputStream {
     properties.load(it)
 }
+properties.put("total_version",total_version)
 
 
 task updateTemplate(type: Copy) {
