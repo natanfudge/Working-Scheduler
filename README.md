@@ -53,7 +53,9 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
 As an example we will schedule things when the player has right-clicked the block.
 To schedule an action we have separate idiomatic Java and Kotlin apis.
  (Note: Java API is usable from Kotlin as well but using the Kotlin-specific one is recommended)
-#### Java
+<details>
+    <summary>Java</Summary>
+
 ```java
 public class ExampleScheduleableBlock extends Block implements Scheduleable {
     public void onScheduleEnd(World world, BlockPos pos, int scheduleId, CompoundTag additionalData) {/*...*/}
@@ -64,17 +66,20 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
         Scheduler.Builder(this, world).schedule(30);
         
         // Repeat the action 4 times with a 10 ticks interval
-        Scheduler.Builder(this, world).repeat(4,10);
+        Scheduler.Builder(this, world).repeat(4, 10);
             
         // Repeat the action for 100 ticks with a 15 ticks interval
-        Scheduler.Builder(this, world).repeatFor(100,15);
+        Scheduler.Builder(this, world).repeatFor(100, 15);
         
         return true;
     }
 }
 ```
+</details>
 
-#### Kotlin
+<details>
+<summary>Kotlin</summary>
+
 ```kotlin
 class ExampleScheduleableBlock(settings: Block.Settings) : Block(settings), Scheduleable {
     override fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag) {/*...*/ }
@@ -94,14 +99,19 @@ class ExampleScheduleableBlock(settings: Block.Settings) : Block(settings), Sche
 }
 ```
 
+</details>
+
 Full example projects can be seen [here](https://github.com/natanfudge/Working-Scheduler/tree/master/example/src/main).
 
 ### Attaching additional data
 Provide the data while scheduling:
-#### Java
+
+<details>
+<summary>Java</summary>
+
 ```java
 public boolean activate(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-    if(player == null) return false;
+    if (player == null) return false;
     CompoundTag scheduleData = new CompoundTag();
     scheduleData.putUuid("player", player.getUuid());
 
@@ -120,8 +130,11 @@ public boolean activate(BlockState blockState, World world, BlockPos pos, Player
     return true;
 }
 ```
+</details>
 
-#### Kotlin
+<details>
+    <summary>Kotlin</summary>
+
 ```kotlin
 override fun activate(
         blockState: BlockState,
@@ -155,6 +168,7 @@ override fun activate(
     return true
 }
 ```
+</details>
 
 And then use the data when the schedule ends:
 ```java
@@ -164,9 +178,9 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
         // Note: you should validate that the player exists and the additionalData was not tampered with.
         // No validation is done for the sake of simplicity.
         PlayerEntity player = world.getPlayerByUuid(additionalData.getUuid("player"));
-        if(scheduleId == 1){
+        if (scheduleId == 1) {
             player.sendMessage(new LiteralText("Normal schedule ended at pos " + pos));
-        }else if(scheduleId == 2){
+        } else if(scheduleId == 2){
             player.sendMessage(new LiteralText("Repeating schedule ended at pos " + pos));
         }
     }
@@ -194,7 +208,7 @@ public class ExampleScheduleableBlock extends Block implements Scheduleable {
     @Override
     public void onBlockRemoved(BlockState beforeState, World world, BlockPos pos, BlockState afterState, boolean bool) {
         // The scheduled action won't occur!
-       if(cancellationToken != null) cancellationToken.cancel(world);
+       if (cancellationToken != null) cancellationToken.cancel(world);
     }
 
 }
@@ -218,7 +232,7 @@ This is because the Block is already instantiated by yourself which helps avoid 
 Additionally, scheduling is most commonly done from blocks.
 Theoretically, an API like that looks like this could exist:
 ```kotlin
-schedule(world,10) {
+schedule(world, 10) {
     println("10 ticks have passed.")
 }
 ```
