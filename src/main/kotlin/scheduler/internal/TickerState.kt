@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.list
+import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.nbt.CompoundTag
@@ -29,7 +30,7 @@ internal data class Schedule(
     val cancellationUUID: UUID = UUID.randomUUID()
 ) {
     @Transient
-    var scheduleable: Scheduleable = DummyScheduleable
+    lateinit var scheduleable: Scheduleable
 }
 
 @Serializable
@@ -46,13 +47,6 @@ internal sealed class Repetition {
 
     @Serializable
     data class Once(override var nextTickTime: Long = 0) : Repetition()
-}
-
-private object DummyScheduleable : Block(Settings.of(Material.STONE)), Scheduleable {
-    override fun onScheduleEnd(world: World, pos: BlockPos, scheduleId: Int, additionalData: CompoundTag) {
-        logWarning("The DummyScheduleable should theoretically never need to be used.")
-    }
-
 }
 
 @Serializable
